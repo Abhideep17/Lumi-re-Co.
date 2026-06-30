@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lumière & Co. — Illuminate Your Everyday</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --forest: #1C2E26;
+      --sage: #2D4A3E;
+      --cream: #F5EDD8;
+      --cream-dark: #E8DCC8;
+      --gold: #C8A96E;
+      --gold-light: #D4B97E;
+      --ink: #1A1A1A;
+      --ink-soft: #3A3A3A;
+      --muted: #7A7060;
+      --font-d: 'Cormorant Garamond', Georgia, serif;
+      --font-b: 'Inter', system-ui, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--cream); color: var(--ink); font-family: var(--font-b); font-size: 15px; line-height: 1.6; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 3rem;
+      transition: background 0.35s, padding 0.35s;
+    }
+    nav.scrolled {
+      background: rgba(28,46,38,0.96);
+      backdrop-filter: blur(10px);
+      padding: 1rem 3rem;
+    }
+    .nav-logo {
+      font-family: var(--font-d); font-size: 1.45rem; font-weight: 400;
+      color: var(--cream); letter-spacing: 0.02em; text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 2.25rem; list-style: none; }
+    .nav-links a {
+      color: var(--cream); text-decoration: none; font-size: 0.72rem;
+      font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+      opacity: 0.8; transition: opacity 0.2s;
+    }
+    .nav-links a:hover { opacity: 1; }
+    .nav-cta {
+      background: var(--gold) !important; color: var(--forest) !important;
+      padding: 0.5rem 1.3rem; border-radius: 2px; opacity: 1 !important;
+      font-weight: 500 !important; transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: var(--gold-light) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh; background: var(--forest);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden; padding: 0 3rem;
+    }
+    .hero-bg-glow {
+      position: absolute; right: -5%; top: 10%; width: 55%; height: 85%;
+      background: radial-gradient(ellipse, rgba(200,169,110,0.07) 0%, transparent 68%);
+      pointer-events: none;
+    }
+    .hero-content {
+      max-width: 1180px; margin: 0 auto; width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 5rem; padding-top: 6rem; padding-bottom: 4rem;
+    }
+    .hero-text { flex: 1; }
+    .hero-eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.75rem; display: block;
+    }
+    .hero-title {
+      font-family: var(--font-d); font-size: clamp(4.5rem, 9vw, 7.5rem);
+      font-weight: 300; line-height: 0.93; color: var(--cream);
+      letter-spacing: -0.01em; margin-bottom: 1.75rem;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+    .hero-sub {
+      font-family: var(--font-d); font-size: 1.25rem; font-weight: 300;
+      font-style: italic; color: rgba(245,237,216,0.6);
+      margin-bottom: 2.75rem; letter-spacing: 0.02em;
+    }
+    .hero-actions { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
+    .btn-primary {
+      display: inline-block; background: var(--gold); color: var(--forest);
+      padding: 0.9rem 2.25rem; font-size: 0.72rem; font-weight: 500;
+      letter-spacing: 0.13em; text-transform: uppercase; text-decoration: none;
+      border-radius: 2px; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-block; color: rgba(245,237,216,0.65); font-size: 0.72rem;
+      font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+      text-decoration: none; border-bottom: 1px solid rgba(200,169,110,0.35);
+      padding-bottom: 2px; transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--cream); border-color: var(--gold); }
+
+    /* ── CANDLE (signature element) ── */
+    .hero-candle {
+      flex-shrink: 0; display: flex; flex-direction: column;
+      align-items: center; position: relative;
+    }
+    .flame-wrap {
+      position: relative; width: 28px; height: 58px;
+      display: flex; justify-content: center;
+    }
+    .flame-glow {
+      position: absolute; width: 80px; height: 80px;
+      background: radial-gradient(circle, rgba(200,169,110,0.22) 0%, transparent 70%);
+      border-radius: 50%; top: -25px; left: 50%;
+      transform: translateX(-50%);
+      animation: glow-pulse 2.8s ease-in-out infinite;
+    }
+    .flame {
+      width: 18px; height: 38px;
+      background: linear-gradient(to bottom, #FFFBEE 0%, #FFD166 28%, #EF9F27 65%, rgba(200,80,10,0) 100%);
+      border-radius: 50% 50% 30% 30% / 65% 65% 35% 35%;
+      position: absolute; bottom: 0;
+      animation: flicker 2.8s ease-in-out infinite;
+      transform-origin: bottom center; filter: blur(0.4px);
+    }
+    .flame-inner {
+      width: 8px; height: 18px;
+      background: linear-gradient(to bottom, #fff 0%, #FFFDF0 45%, transparent 100%);
+      border-radius: 50% 50% 30% 30% / 65% 65% 35% 35%;
+      position: absolute; bottom: 3px; left: 50%;
+      transform: translateX(-50%);
+      animation: flicker-inner 2.8s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+    .wick {
+      width: 2px; height: 11px; background: #2A1A10;
+      border-radius: 1px; position: absolute; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+    }
+    @keyframes flicker {
+      0%,100% { transform: scaleX(1) scaleY(1) rotate(-1deg); }
+      20%      { transform: scaleX(0.88) scaleY(1.06) rotate(1.8deg); }
+      45%      { transform: scaleX(1.06) scaleY(0.96) rotate(-0.5deg); }
+      70%      { transform: scaleX(0.93) scaleY(1.04) rotate(2.2deg); }
+    }
+    @keyframes flicker-inner {
+      0%,100% { transform: translateX(-50%) scaleX(1) rotate(-1deg); }
+      35%      { transform: translateX(-50%) scaleX(1.2) rotate(2deg); }
+      65%      { transform: translateX(-50%) scaleX(0.8) rotate(-1.5deg); }
+    }
+    @keyframes glow-pulse {
+      0%,100% { opacity: 1; transform: translateX(-50%) scale(1); }
+      50%      { opacity: 0.65; transform: translateX(-50%) scale(1.12); }
+    }
+    .candle-jar {
+      width: 96px; background: linear-gradient(135deg,#EDE4CE,#D8CCBC,#C8BEB0);
+      border-radius: 5px 5px 10px 10px; position: relative; overflow: hidden;
+    }
+    .jar-h { height: 240px; }
+    .jar-wax {
+      position: absolute; top: 0; left: 0; right: 0; height: 22px;
+      background: linear-gradient(to bottom,rgba(245,237,216,0.8),transparent);
+      border-radius: 5px 5px 0 0;
+    }
+    .jar-shine {
+      position: absolute; top: 10px; left: 8px; width: 10px; height: 60px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+      border-radius: 5px; transform: rotate(-8deg);
+    }
+    .jar-label {
+      position: absolute; bottom: 48px; left: 50%; transform: translateX(-50%);
+      width: 72px; text-align: center; border-top: 0.5px solid rgba(45,74,62,0.25);
+      border-bottom: 0.5px solid rgba(45,74,62,0.25); padding: 6px 0;
+    }
+    .jar-label-brand {
+      font-family: var(--font-d); font-size: 8px; letter-spacing: 0.12em;
+      color: var(--sage); opacity: 0.65; display: block; text-transform: uppercase;
+    }
+    .jar-label-scent {
+      font-family: var(--font-d); font-size: 10px; font-style: italic;
+      color: var(--sage); opacity: 0.8; display: block; margin-top: 2px;
+    }
+    .candle-rim {
+      width: 104px; height: 10px;
+      background: linear-gradient(to bottom,#D0C8B8,#BEB8A8);
+      border-radius: 3px 3px 0 0;
+    }
+    .candle-base {
+      width: 96px; height: 14px;
+      background: linear-gradient(to bottom,#C8C0B0,#B8B0A0);
+      border-radius: 0 0 6px 6px;
+    }
+    .candle-shadow {
+      width: 80px; height: 10px;
+      background: rgba(0,0,0,0.18);
+      border-radius: 50%; margin-top: 5px;
+      filter: blur(7px);
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      background: var(--sage); padding: 1.4rem 3rem;
+      display: flex; justify-content: center; gap: 5rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: var(--font-d); font-size: 1.7rem; font-weight: 300;
+      color: var(--gold); display: block; line-height: 1;
+    }
+    .stat-lbl {
+      font-size: 0.68rem; letter-spacing: 0.13em; text-transform: uppercase;
+      color: rgba(245,237,216,0.65); margin-top: 3px; display: block;
+    }
+
+    /* ── SECTION COMMONS ── */
+    section { padding: 5.5rem 3rem; }
+    .container { max-width: 1180px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); display: block; margin-bottom: 0.8rem;
+    }
+    .sec-title {
+      font-family: var(--font-d); font-size: clamp(2rem, 3.5vw, 2.75rem);
+      font-weight: 400; line-height: 1.1; color: var(--ink);
+    }
+    .sec-title em { font-style: italic; color: var(--sage); }
+
+    /* ── COLLECTION ── */
+    .collection { background: var(--cream); }
+    .coll-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 3rem;
+    }
+    .view-all {
+      font-size: 0.72rem; color: var(--sage); text-decoration: none;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      border-bottom: 1px solid var(--gold); padding-bottom: 2px;
+      transition: opacity 0.2s;
+    }
+    .view-all:hover { opacity: 0.65; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(245px, 1fr));
+      gap: 1.5rem;
+    }
+    .pcard {
+      background: #EDE4CC; border-radius: 3px;
+      overflow: hidden; transition: transform 0.25s; cursor: pointer;
+    }
+    .pcard:hover { transform: translateY(-5px); }
+    .pcard-img {
+      height: 200px; display: flex; align-items: center; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .pcard-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(200,169,110,0.12) 0%, transparent 70%);
+    }
+    /* mini candles inside cards */
+    .mc { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    .mc-fw { position: relative; width: 14px; height: 28px; display: flex; justify-content: center; }
+    .mc-fl {
+      width: 9px; height: 20px;
+      background: linear-gradient(to bottom,#FFFBEE 0%,#FFD166 40%,rgba(239,159,39,0) 100%);
+      border-radius: 50% 50% 30% 30% / 65% 65% 35% 35%;
+      position: absolute; bottom: 0;
+      animation: flicker 2.8s ease-in-out infinite; transform-origin: bottom center;
+    }
+    .mc-gl {
+      position: absolute; width: 32px; height: 32px;
+      background: radial-gradient(circle,rgba(200,169,110,0.18) 0%,transparent 70%);
+      border-radius: 50%; top: -10px; left: 50%; transform: translateX(-50%);
+      animation: glow-pulse 2.8s ease-in-out infinite;
+    }
+    .mc-wk { width: 1.5px; height: 7px; background: #2A1A10; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); }
+    .mc-b { border-radius: 3px 3px 2px 2px; position: relative; }
+    .mc-base { border-radius: 0 0 3px 3px; }
+    .pcard-info { padding: 1.3rem; }
+    .pcard-cat { font-size: 0.62rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+    .pcard-name { font-family: var(--font-d); font-size: 1.2rem; font-weight: 400; color: var(--ink); margin-bottom: 0.4rem; }
+    .pcard-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.55; margin-bottom: 1.1rem; }
+    .pcard-foot { display: flex; align-items: center; justify-content: space-between; }
+    .pcard-price { font-family: var(--font-d); font-size: 1.25rem; font-weight: 400; color: var(--ink); }
+    .add-btn {
+      background: var(--sage); color: var(--cream); border: none;
+      padding: 0.48rem 0.9rem; font-size: 0.63rem; letter-spacing: 0.1em;
+      text-transform: uppercase; border-radius: 2px; cursor: pointer;
+      font-family: var(--font-b); transition: background 0.2s;
+    }
+    .add-btn:hover { background: var(--forest); }
+
+    /* ── STORY ── */
+    .story { background: var(--cream-dark); text-align: center; padding: 6.5rem 3rem; }
+    .story .container { max-width: 700px; }
+    .story-orn { font-family: var(--font-d); font-size: 3.5rem; color: var(--gold); opacity: 0.35; line-height: 1; margin-bottom: 1.25rem; }
+    .story-pull {
+      font-family: var(--font-d); font-size: clamp(1.2rem,2.2vw,1.45rem);
+      font-weight: 300; font-style: italic; line-height: 1.85; color: var(--ink-soft);
+      margin-bottom: 2rem;
+    }
+    .story-meta { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+    .story-pills { display: flex; justify-content: center; gap: 1rem; margin-top: 2.5rem; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      border: 1px solid rgba(200,169,110,0.4); border-radius: 2px;
+      padding: 0.5rem 1.1rem; font-size: 0.7rem; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+    }
+    .pill-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+
+    /* ── GIFT BANNER ── */
+    .gift-section { background: var(--forest); }
+    .gift-inner { display: flex; align-items: center; gap: 5rem; }
+    .gift-text { flex: 1; }
+    .gift-text .sec-title { color: var(--cream); }
+    .gift-text .sec-title em { color: var(--gold); }
+    .gift-sub {
+      font-size: 0.9rem; color: rgba(245,237,216,0.6);
+      line-height: 1.75; margin: 1rem 0 2.25rem; max-width: 420px;
+    }
+    .gift-cards { flex: 1; display: flex; flex-direction: column; gap: 0.85rem; }
+    .gcard {
+      background: rgba(245,237,216,0.05);
+      border: 1px solid rgba(200,169,110,0.18); border-radius: 3px;
+      padding: 1.3rem 1.5rem; display: flex; align-items: center;
+      justify-content: space-between;
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .gcard:hover { background: rgba(245,237,216,0.09); border-color: rgba(200,169,110,0.35); }
+    .gcard-name { font-family: var(--font-d); font-size: 1.1rem; font-weight: 400; color: var(--cream); }
+    .gcard-sub { font-size: 0.73rem; color: rgba(245,237,216,0.45); margin-top: 3px; letter-spacing: 0.04em; }
+    .gcard-price { font-family: var(--font-d); font-size: 1.4rem; font-weight: 300; color: var(--gold); }
+
+    /* ── SCENT NOTES ── */
+    .scent-section { background: var(--cream); border-top: 1px solid var(--cream-dark); }
+    .scent-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 0; margin-top: 3rem; }
+    .scent-item {
+      padding: 1.75rem 1.5rem; border-right: 1px solid var(--cream-dark);
+      border-bottom: 1px solid var(--cream-dark);
+    }
+    .scent-item:last-child, .scent-item:nth-child(4n) { border-right: none; }
+    .scent-icon { font-size: 1.5rem; margin-bottom: 0.75rem; display: block; color: var(--gold); }
+    .scent-name { font-family: var(--font-d); font-size: 1.05rem; font-weight: 400; color: var(--ink); margin-bottom: 0.35rem; }
+    .scent-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
+
+    /* ── NEWSLETTER ── */
+    .newsletter { background: var(--sage); text-align: center; padding: 5.5rem 3rem; }
+    .newsletter .container { max-width: 540px; }
+    .newsletter .eyebrow { color: var(--gold); }
+    .newsletter .sec-title { color: var(--cream); margin-bottom: 0.85rem; }
+    .nl-sub { font-size: 0.88rem; color: rgba(245,237,216,0.6); line-height: 1.7; margin-bottom: 2.25rem; }
+    .nl-form {
+      display: flex; border: 1px solid rgba(200,169,110,0.3);
+      border-radius: 2px; overflow: hidden;
+    }
+    .nl-input {
+      flex: 1; border: none; background: rgba(245,237,216,0.06);
+      padding: 0.95rem 1.3rem; font-family: var(--font-b); font-size: 0.85rem;
+      color: var(--cream); outline: none;
+    }
+    .nl-input::placeholder { color: rgba(245,237,216,0.35); }
+    .nl-btn {
+      background: var(--gold); color: var(--forest); border: none;
+      padding: 0.95rem 1.75rem; font-size: 0.7rem; font-family: var(--font-b);
+      letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+      transition: background 0.2s; white-space: nowrap; font-weight: 500;
+    }
+    .nl-btn:hover { background: var(--gold-light); }
+    .nl-fine { font-size: 0.68rem; color: rgba(245,237,216,0.35); margin-top: 1rem; }
+
+    /* ── FOOTER ── */
+    footer { background: var(--forest); padding: 4rem 3rem 2rem; }
+    .footer-top {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3.5rem; margin-bottom: 3rem;
+      padding-bottom: 3rem; border-bottom: 1px solid rgba(245,237,216,0.08);
+    }
+    .f-logo { font-family: var(--font-d); font-size: 1.35rem; font-weight: 400; color: var(--cream); text-decoration: none; display: block; margin-bottom: 0.9rem; }
+    .f-tagline { font-family: var(--font-d); font-style: italic; font-size: 0.95rem; color: rgba(245,237,216,0.45); line-height: 1.65; }
+    .f-col-title { font-size: 0.63rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
+    .f-links { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+    .f-links a { color: rgba(245,237,216,0.55); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .f-links a:hover { color: var(--cream); }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; }
+    .f-copy { font-size: 0.73rem; color: rgba(245,237,216,0.35); }
+    .f-social { display: flex; gap: 1.5rem; }
+    .f-social a { color: rgba(245,237,216,0.45); text-decoration: none; font-size: 0.73rem; letter-spacing: 0.06em; transition: color 0.2s; }
+    .f-social a:hover { color: var(--gold); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.1rem 1.5rem; }
+      nav.scrolled { padding: 0.9rem 1.5rem; }
+      .nav-links li:not(:last-child):not(:nth-last-child(2)) { display: none; }
+      section { padding: 4rem 1.5rem; }
+      .hero { padding: 0 1.5rem; }
+      .hero-content { flex-direction: column; gap: 3rem; padding-top: 8rem; padding-bottom: 4rem; text-align: center; }
+      .hero-actions { justify-content: center; }
+      .hero-candle { transform: scale(0.8); }
+      .stats-bar { gap: 2rem; padding: 1.25rem 1.5rem; flex-wrap: wrap; }
+      .coll-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+      .story { padding: 4.5rem 1.5rem; }
+      .gift-inner { flex-direction: column; gap: 3rem; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .footer-top > div:first-child { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .f-social { justify-content: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 3.8rem; }
+      .stats-bar { gap: 1.5rem; }
+      .stat-num { font-size: 1.35rem; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-top > div:first-child { grid-column: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .flame, .flame-inner, .mc-fl, .flame-glow, .mc-gl { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">Lumière & Co.</a>
+  <ul class="nav-links">
+    <li><a href="#collection">Shop</a></li>
+    <li><a href="#story">About</a></li>
+    <li><a href="#gifts">Gifts</a></li>
+    <li><a href="#newsletter" class="nav-cta">Shop now</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg-glow"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <span class="hero-eyebrow">Artisan candles & home fragrance</span>
+      <h1 class="hero-title">Lumière<br><em>&amp; Co.</em></h1>
+      <p class="hero-sub">Illuminate your everyday</p>
+      <div class="hero-actions">
+        <a href="#collection" class="btn-primary">Shop the collection</a>
+        <a href="#gifts" class="btn-ghost">Explore gift sets</a>
+      </div>
+    </div>
+    <div class="hero-candle">
+      <div class="flame-wrap">
+        <div class="flame-glow"></div>
+        <div class="flame"><div class="flame-inner"></div></div>
+        <div class="wick"></div>
+      </div>
+      <div class="candle-rim"></div>
+      <div class="candle-jar">
+        <div class="jar-h"></div>
+        <div class="jar-wax"></div>
+        <div class="jar-shine"></div>
+        <div class="jar-label">
+          <span class="jar-label-brand">Lumière & Co.</span>
+          <span class="jar-label-scent">Cedar & Smoke</span>
+        </div>
+      </div>
+      <div class="candle-base"></div>
+      <div class="candle-shadow"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><span class="stat-num">20</span><span class="stat-lbl">Unique scents</span></div>
+  <div class="stat"><span class="stat-num">100%</span><span class="stat-lbl">Natural soy wax</span></div>
+  <div class="stat"><span class="stat-num">80 hrs</span><span class="stat-lbl">Max burn time</span></div>
+  <div class="stat"><span class="stat-num">Free</span><span class="stat-lbl">Shipping over $65</span></div>
+</div>
+
+<!-- COLLECTION -->
+<section class="collection" id="collection">
+  <div class="container">
+    <div class="coll-header">
+      <div>
+        <span class="eyebrow">The collection</span>
+        <h2 class="sec-title">Scents that stay <em>with you</em></h2>
+      </div>
+      <a href="#" class="view-all">View all 20 products →</a>
+    </div>
+    <div class="grid" id="products-grid"></div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="container">
+    <div class="story-orn">✦</div>
+    <span class="eyebrow" style="display:block;margin-bottom:1.25rem">Our story</span>
+    <p class="story-pull">
+      "Every Lumière & Co. candle begins with a scent memory — the cedar warmth of a mountain
+      cabin, the salt air of a coastal morning. We blend premium fragrance oils into 100% natural
+      soy wax to create something that doesn't just smell beautiful, but transforms a space entirely."
+    </p>
+    <p class="story-meta">Crafted with intention · Every batch, every time</p>
+    <div class="story-pills">
+      <span class="pill"><span class="pill-dot"></span>Clean-burning soy wax</span>
+      <span class="pill"><span class="pill-dot"></span>Phthalate-free fragrance</span>
+      <span class="pill"><span class="pill-dot"></span>Recyclable glass jars</span>
+      <span class="pill"><span class="pill-dot"></span>Cotton core wicks</span>
+    </div>
+  </div>
+</section>
+
+<!-- GIFT SECTION -->
+<section class="gift-section" id="gifts">
+  <div class="container">
+    <div class="gift-inner">
+      <div class="gift-text">
+        <span class="eyebrow">Gift collections</span>
+        <h2 class="sec-title">The perfect gift,<br><em>every time</em></h2>
+        <p class="gift-sub">Beautifully packaged and ready to give. Each set is curated to create
+        a complete sensory experience — from the first light to the last trace of scent.</p>
+        <a href="#" class="btn-primary">Shop all gift sets</a>
+      </div>
+      <div class="gift-cards">
+        <div class="gcard">
+          <div>
+            <div class="gcard-name">The Starter Duo</div>
+            <div class="gcard-sub">2 × 8 oz signature candles, gift-boxed</div>
+          </div>
+          <div class="gcard-price">$48</div>
+        </div>
+        <div class="gcard">
+          <div>
+            <div class="gcard-name">The Glow Set</div>
+            <div class="gcard-sub">3 × 8 oz best-sellers, kraft gift box</div>
+          </div>
+          <div class="gcard-price">$72</div>
+        </div>
+        <div class="gcard">
+          <div>
+            <div class="gcard-name">The Ritual Set</div>
+            <div class="gcard-sub">Candle + reed diffuser + room spray</div>
+          </div>
+          <div class="gcard-price">$82</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCENT NOTES -->
+<section class="scent-section">
+  <div class="container">
+    <span class="eyebrow">Signature scents</span>
+    <h2 class="sec-title">Five scents, <em>infinite moods</em></h2>
+    <div class="scent-grid" id="scent-grid"></div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter" id="newsletter">
+  <div class="container">
+    <span class="eyebrow">Join the list</span>
+    <h2 class="sec-title">Scent discoveries &<br><em>early access</em></h2>
+    <p class="nl-sub">New scents, seasonal collections, and 10% off your first order —
+    delivered to your inbox, never your nerves.</p>
+    <div class="nl-form">
+      <input type="email" class="nl-input" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe</button>
+    </div>
+    <p class="nl-fine">No spam, ever. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="#" class="f-logo">Lumière & Co.</a>
+      <p class="f-tagline">Premium soy candles and home fragrance,<br>crafted to illuminate the everyday.</p>
+    </div>
+    <div>
+      <p class="f-col-title">Shop</p>
+      <ul class="f-links">
+        <li><a href="#">Signature candles</a></li>
+        <li><a href="#">Grand collection</a></li>
+        <li><a href="#">Reed diffusers</a></li>
+        <li><a href="#">Room sprays</a></li>
+        <li><a href="#">Gift sets</a></li>
+        <li><a href="#">Accessories</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="f-col-title">Help</p>
+      <ul class="f-links">
+        <li><a href="#">Shipping info</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Candle care</a></li>
+        <li><a href="#">Contact us</a></li>
+        <li><a href="#">FAQ</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="f-col-title">Company</p>
+      <ul class="f-links">
+        <li><a href="#">Our story</a></li>
+        <li><a href="#">Ingredients</a></li>
+        <li><a href="#">Wholesale</a></li>
+        <li><a href="#">Privacy policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="f-copy">© 2026 Lumière & Co. All rights reserved.</p>
+    <div class="f-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+      <a href="#">TikTok</a>
+      <a href="#">Facebook</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Products
+  const products = [
+    { name:'Cedar & Smoke',      cat:'Signature candle', desc:'Cedarwood, smoked birch & black pepper. The perfect evening companion.',       price:'$28', bg:'#2A3C28', wax:'#D4C9A8', h:80 },
+    { name:'Black Fig & Ivy',    cat:'Signature candle', desc:'Dark lush fig and crisp ivy leaves over a base of warm amber.',               price:'$28', bg:'#2E2A38', wax:'#C8C0B8', h:80 },
+    { name:'Vanilla Bourbon',    cat:'Signature candle', desc:'Rich Madagascar vanilla and warm oak barrel notes. Pure comfort.',            price:'$28', bg:'#3A2A1C', wax:'#D8C8A0', h:80 },
+    { name:'Sea Salt & Driftwood',cat:'Signature candle',desc:'Ocean air, sun-bleached wood, and coastal wildflowers. 45 hr burn.',         price:'$28', bg:'#22303A', wax:'#D0CECC', h:80 },
+    { name:'Hinoki & White Tea', cat:'Signature candle', desc:'Japanese cypress and white tea — meditative, spa-like, serene.',             price:'$28', bg:'#283428', wax:'#CCD4C0', h:80 },
+    { name:'Cedar & Smoke — Grand',cat:'Grand collection',desc:'Our best-seller in a 16 oz double-wick jar. Up to 80 hours.',              price:'$48', bg:'#2A3C28', wax:'#D4C9A8', h:110 },
+    { name:'The Glow Set',       cat:'Gift set',         desc:'Cedar & Smoke, Black Fig & Ivy, and Vanilla Bourbon. Gift-ready kraft box.', price:'$72', bg:'#2D3828', wax:'#D0CCAA', h:80 },
+    { name:'Candle Care Kit',    cat:'Accessories',      desc:'Wick trimmer, snuffer & ceramic catch tray — for the perfect burn.',         price:'$34', bg:'#2A2A2A', wax:'#C8C4BC', h:70 },
+  ];
+
+  const grid = document.getElementById('products-grid');
+  grid.innerHTML = products.map(p => `
+    <div class="pcard">
+      <div class="pcard-img" style="background:${p.bg}22">
+        <div class="pcard-glow"></div>
+        <div class="mc">
+          <div class="mc-fw">
+            <div class="mc-gl"></div>
+            <div class="mc-fl"></div>
+            <div class="mc-wk"></div>
+          </div>
+          <div class="mc-b" style="width:52px;height:${p.h}px;background:linear-gradient(135deg,${p.wax},${p.wax}BB)"></div>
+          <div class="mc-base" style="width:58px;height:7px;background:${p.wax}99"></div>
+        </div>
+      </div>
+      <div class="pcard-info">
+        <p class="pcard-cat">${p.cat}</p>
+        <h3 class="pcard-name">${p.name}</h3>
+        <p class="pcard-desc">${p.desc}</p>
+        <div class="pcard-foot">
+          <span class="pcard-price">${p.price}</span>
+          <button class="add-btn">Add to cart</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // Scents
+  const scents = [
+    { icon:'🌲', name:'Cedar & Smoke',       desc:'Warm, woody, smoky. Made for slow evenings.' },
+    { icon:'🍃', name:'Black Fig & Ivy',     desc:'Dark and lush. A moody, garden-at-dusk scent.' },
+    { icon:'🥃', name:'Vanilla Bourbon',     desc:'Rich and indulgent. The scent of total comfort.' },
+    { icon:'🌊', name:'Sea Salt & Driftwood', desc:'Crisp and coastal. Like open windows, ocean air.' },
+    { icon:'🍵', name:'Hinoki & White Tea',   desc:'Calm and meditative. A moment of pure stillness.' },
+  ];
+
+  document.getElementById('scent-grid').innerHTML = scents.map(s => `
+    <div class="scent-item">
+      <span class="scent-icon">${s.icon}</span>
+      <div class="scent-name">${s.name}</div>
+      <div class="scent-desc">${s.desc}</div>
+    </div>
+  `).join('');
+
+  // Newsletter
+  document.querySelector('.nl-btn').addEventListener('click', () => {
+    const inp = document.querySelector('.nl-input');
+    if (inp.value && inp.value.includes('@')) {
+      inp.value = '';
+      inp.placeholder = 'You\'re on the list. ✦';
+    }
+  });
+</script>
+
+</body>
+</html>
